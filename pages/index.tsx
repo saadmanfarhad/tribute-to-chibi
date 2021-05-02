@@ -27,7 +27,7 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-export default function Home({ images }) {
+export default function Home({ images, url }) {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   const nextImage = () => {
@@ -60,13 +60,7 @@ export default function Home({ images }) {
     }
   }, 5000);
 
-  const {
-    data,
-  } = useSWR(
-    "https://573413187935667:G5myzvpLf4lSmDGPbHITs114myo@api.cloudinary.com/v1_1/hatch-limited/resources/image/tags/chibi",
-    fetcher,
-    { initialData: images }
-  );
+  const { data } = useSWR(url, fetcher, { initialData: images });
 
   return (
     <div className="bg-gray-800 h-screen flex items-center justify-center">
@@ -92,7 +86,7 @@ export default function Home({ images }) {
 
 export async function getServerSideProps(ctx) {
   const imagesObjects = await fetcher(
-    "https://573413187935667:G5myzvpLf4lSmDGPbHITs114myo@api.cloudinary.com/v1_1/hatch-limited/resources/image/tags/chibi"
+    `https://${process.env.CLOUDINARY_API_KEY}:${process.env.CLOUDINARY_API_SECRET}@api.cloudinary.com/v1_1/hatch-limited/resources/image/tags/chibi`
   );
 
   const images = imagesObjects.resources.map((img) => {
@@ -102,6 +96,7 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       images,
+      url: `https://${process.env.CLOUDINARY_API_KEY}:${process.env.CLOUDINARY_API_SECRET}@api.cloudinary.com/v1_1/hatch-limited/resources/image/tags/chibi`,
     },
   };
 }
