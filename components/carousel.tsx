@@ -7,8 +7,6 @@ const Carousel = ({ images, previousImage, nextImage, imageIndex }) => {
       smallerImages = images.slice(startIndex, endIndex);
     } else {
       if (imageIndex === 0) {
-        console.log("Index 0");
-
         smallerImages = [
           ...images.slice(images.length - 2),
           ...images.slice(0, 3),
