@@ -37,16 +37,6 @@ export default function Home({ images }) {
     }
   };
 
-  // useInterval(() => {
-  //   const nextImageIndex = currentImageIndex + 1;
-
-  //   if (nextImageIndex > data.length - 1) {
-  //     setCurrentImageIndex(0);
-  //   } else {
-  //     setCurrentImageIndex(nextImageIndex);
-  //   }
-  // }, 5000);
-
   const previousImage = () => {
     const previousImageIndex = currentImageIndex - 1;
 
@@ -56,6 +46,16 @@ export default function Home({ images }) {
       setCurrentImageIndex(previousImageIndex);
     }
   };
+
+  useInterval(() => {
+    const nextImageIndex = currentImageIndex + 1;
+
+    if (nextImageIndex > data.length - 1) {
+      setCurrentImageIndex(0);
+    } else {
+      setCurrentImageIndex(nextImageIndex);
+    }
+  }, 5000);
 
   const {
     data,
