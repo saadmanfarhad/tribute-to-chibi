@@ -50,6 +50,10 @@ export default function Home({ images, url }) {
     }
   };
 
+  const setImage = (index: number) => {
+    setCurrentImageIndex(index);
+  };
+
   useInterval(() => {
     const nextImageIndex = currentImageIndex + 1;
 
@@ -77,6 +81,7 @@ export default function Home({ images, url }) {
           images={data}
           nextImage={nextImage}
           previousImage={previousImage}
+          setImage={setImage}
           imageIndex={currentImageIndex}
         />
       </body>

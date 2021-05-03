@@ -1,4 +1,10 @@
-const Carousel = ({ images, previousImage, nextImage, imageIndex }) => {
+const Carousel = ({
+  images,
+  previousImage,
+  nextImage,
+  setImage,
+  imageIndex,
+}) => {
   const getSmallerImages = () => {
     const startIndex = imageIndex - 2;
     const endIndex = imageIndex + 3;
@@ -32,11 +38,13 @@ const Carousel = ({ images, previousImage, nextImage, imageIndex }) => {
     return smallerImages.map((image, index) => (
       <div>
         <img
-          className="image1 description h-24 opacity-50 hover:opacity-100 cursor-pointer"
+          className={`image1 description ${
+            images[imageIndex] === image ? `opacity-100` : `opacity-50`
+          } h-24 hover:opacity-100 cursor-pointer`}
           src={image}
           onClick={() => {
-            console.log(index);
-            return;
+            const index = images.findIndex((url: string) => image === url);
+            setImage(index);
           }}
           alt="Dog's Nose"
         />
@@ -54,18 +62,6 @@ const Carousel = ({ images, previousImage, nextImage, imageIndex }) => {
           <div className="image1 w-full object-cover">
             <img src={images[imageIndex]} />
           </div>
-        </div>
-        <div className="mySlides hidden">
-          <div className="image2 w-full object-cover"></div>
-        </div>
-        <div className="mySlides hidden">
-          <div className="image3 w-full object-cover"></div>
-        </div>
-        <div className="mySlides hidden">
-          <div className="image4 w-full object-cover"></div>
-        </div>
-        <div className="mySlides hidden">
-          <div className="image5 w-full object-cover"></div>
         </div>
 
         {/* <!-- butttons --> */}
