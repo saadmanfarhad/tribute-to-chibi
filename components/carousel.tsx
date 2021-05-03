@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 const Carousel = ({
   images,
   previousImage,
@@ -59,9 +61,27 @@ const Carousel = ({
       <div className="shadow-2xl relative">
         {/* <!-- large image on slides --> */}
         <div className="mySlides">
-          <div className="image1 w-full object-cover">
+          <motion.div
+            key={images[imageIndex]}
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {
+                scale: 0.8,
+                opacity: 0,
+              },
+              visible: {
+                scale: 1,
+                opacity: 1,
+                transition: {
+                  delay: 0.5,
+                },
+              },
+            }}
+            className="image1 w-full object-cover"
+          >
             <img src={images[imageIndex]} />
-          </div>
+          </motion.div>
         </div>
 
         {/* <!-- butttons --> */}
