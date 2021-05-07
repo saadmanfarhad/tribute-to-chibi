@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import Head from "next/head";
-import Image from "next/image";
 import Carousel from "../components/carousel";
 import useSWR from "swr";
 import axios from "axios";
@@ -28,6 +27,7 @@ function useInterval(callback, delay) {
 }
 
 export default function Home({ images, url }) {
+  const { data } = useSWR(url, fetcher, { initialData: images });
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   const nextImage = () => {
@@ -64,12 +64,10 @@ export default function Home({ images, url }) {
     }
   }, 5000);
 
-  const { data } = useSWR(url, fetcher, { initialData: images });
-
   return (
     <div className="bg-gray-800 h-screen flex items-center justify-center">
       <Head>
-        <title>Chibi </title>
+        <title>Chibi</title>
         <meta
           name="description"
           content="Our memories of Chibi through camera"
@@ -89,12 +87,25 @@ export default function Home({ images, url }) {
   );
 }
 
-export async function getServerSideProps(ctx) {
-  const imagesObjects = await fetcher(
+export async function getServerSideProps() {
+  let allImages = [];
+
+  let initialResult = await fetcher(
     `https://${process.env.CLOUDINARY_API_KEY}:${process.env.CLOUDINARY_API_SECRET}@api.cloudinary.com/v1_1/hatch-limited/resources/image/tags/chibi`
   );
+  allImages = [...allImages, ...initialResult.resources];
 
-  const images = imagesObjects.resources.map((img) => {
+  let nextCursor = initialResult.next_cursor;
+
+  while (nextCursor) {
+    const nextResult = await fetcher(
+      `https://${process.env.CLOUDINARY_API_KEY}:${process.env.CLOUDINARY_API_SECRET}@api.cloudinary.com/v1_1/hatch-limited/resources/image/tags/chibi?next_cursor=${nextCursor}`
+    );
+    allImages = [...allImages, ...nextResult.resources];
+    nextCursor = nextResult.next_cursor;
+  }
+
+  const images = allImages.map((img) => {
     return img.secure_url;
   });
 
